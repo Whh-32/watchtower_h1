@@ -1,8 +1,8 @@
 # Multi-stage build for Watchtower
 FROM golang:1.21-alpine AS builder
 
-# Install build dependencies
-RUN apk add --no-cache git make
+# Install build dependencies including C compiler for CGO and sqlite
+RUN apk add --no-cache git make gcc musl-dev sqlite-dev
 
 # Set working directory
 WORKDIR /build

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs - Watchtower</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛡️ Watchtower</h1>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/domains">Domains</a></li>
+                <li><a href="/programs">Programs</a></li>
+                <li><a href="/status-changes">Status Changes</a></li>
+                <li><a href="/filters">Filters</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h2>HackerOne Programs</h2>
+            <p>All monitored bug bounty programs</p>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Handle</th>
+                        <th>URL</th>
+                        <th>Last Scanned</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .Programs}}
+                    <tr>
+                        <td><strong>{{.Name}}</strong></td>
+                        <td><code>{{.Handle}}</code></td>
+                        <td>
+                            {{if .URL}}
+                            <a href="{{.URL}}" target="_blank">{{.URL}}</a>
+                            {{else}}
+                            -
+                            {{end}}
+                        </td>
+                        <td>
+                            {{if .LastScanned}}
+                            {{.LastScanned.Format "2006-01-02 15:04"}}
+                            {{else}}
+                            Never
+                            {{end}}
+                        </td>
+                        <td>
+                            <a href="/domains?program={{.Handle}}" class="btn btn-small">View Domains</a>
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="5" class="empty">No programs found</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Watchtower - Automated Bug Bounty Asset Discovery</p>
+        </div>
+    </footer>
+</body>
+</html>

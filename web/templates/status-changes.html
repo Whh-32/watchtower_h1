@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Changes - Watchtower</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta http-equiv="refresh" content="30">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛡️ Watchtower</h1>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/domains">Domains</a></li>
+                <li><a href="/programs">Programs</a></li>
+                <li><a href="/status-changes">Status Changes</a></li>
+                <li><a href="/filters">Filters</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h2>Domain Status Changes</h2>
+            <p>Track when domains change status (especially DOWN → UP) - Auto-refreshing every 30 seconds</p>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>Program</th>
+                        <th>Old Status</th>
+                        <th>New Status</th>
+                        <th>Changed At</th>
+                        <th>Alert</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{range .StatusChanges}}
+                    <tr class="{{if and (eq .OldStatus "down") (eq .NewStatus "up")}}status-change-up{{end}}">
+                        <td><code>{{.Domain}}</code></td>
+                        <td><a href="/domains?program={{.Program}}">{{.Program}}</a></td>
+                        <td>
+                            <span class="status-badge status-{{.OldStatus}}">{{.OldStatus}}</span>
+                        </td>
+                        <td>
+                            <span class="status-badge status-{{.NewStatus}}">{{.NewStatus}}</span>
+                        </td>
+                        <td>{{.ChangedAt.Format "2006-01-02 15:04:05"}}</td>
+                        <td>
+                            {{if and (eq .OldStatus "down") (eq .NewStatus "up")}}
+                            <span class="badge badge-alert">🚨 NEWLY UP!</span>
+                            {{end}}
+                        </td>
+                    </tr>
+                    {{else}}
+                    <tr>
+                        <td colspan="6" class="empty">No status changes recorded</td>
+                    </tr>
+                    {{end}}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Watchtower - Automated Bug Bounty Asset Discovery | Last updated: <span id="updateTime"></span></p>
+        </div>
+    </footer>
+    <script>
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('updateTime').textContent = now.toLocaleTimeString();
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>

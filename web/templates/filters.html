@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Filters - Watchtower</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛡️ Watchtower</h1>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/domains">Domains</a></li>
+                <li><a href="/programs">Programs</a></li>
+                <li><a href="/status-changes">Status Changes</a></li>
+                <li><a href="/filters">Filters</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h2>Program Filters</h2>
+            <p>Filter programs by type and bounty eligibility</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{len .RDPPrograms}}</div>
+                <div class="stat-label">RDP Programs</div>
+                <a href="/programs?type=RDP" class="btn btn-small" style="margin-top: 1rem;">View RDP</a>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{len .VDPPrograms}}</div>
+                <div class="stat-label">VDP Programs</div>
+                <a href="/programs?type=VDP" class="btn btn-small" style="margin-top: 1rem;">View VDP</a>
+            </div>
+            <div class="stat-card stat-new">
+                <div class="stat-value">{{len .BountyPrograms}}</div>
+                <div class="stat-label">Bounty Programs</div>
+                <a href="/programs?bounties=true" class="btn btn-small" style="margin-top: 1rem;">View Bounties</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>RDP Programs (Remote Disclosure Programs)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Handle</th>
+                            <th>Domain</th>
+                            <th>Bounties</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .RDPPrograms}}
+                        <tr>
+                            <td><strong>{{.Name}}</strong></td>
+                            <td><code>{{.Handle}}</code></td>
+                            <td>{{.Domain}}</td>
+                            <td>{{if .OffersBounties}}✅{{else}}❌{{end}}</td>
+                            <td><a href="/domains?program={{.Handle}}" class="btn btn-small">View Domains</a></td>
+                        </tr>
+                        {{else}}
+                        <tr><td colspan="5" class="empty">No RDP programs found</td></tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>VDP Programs (Vulnerability Disclosure Programs)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Handle</th>
+                            <th>Domain</th>
+                            <th>Bounties</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .VDPPrograms}}
+                        <tr>
+                            <td><strong>{{.Name}}</strong></td>
+                            <td><code>{{.Handle}}</code></td>
+                            <td>{{.Domain}}</td>
+                            <td>{{if .OffersBounties}}✅{{else}}❌{{end}}</td>
+                            <td><a href="/domains?program={{.Handle}}" class="btn btn-small">View Domains</a></td>
+                        </tr>
+                        {{else}}
+                        <tr><td colspan="5" class="empty">No VDP programs found</td></tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Bounty Programs (Programs Offering Bounties)</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Handle</th>
+                            <th>Type</th>
+                            <th>Domain</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .BountyPrograms}}
+                        <tr>
+                            <td><strong>{{.Name}}</strong></td>
+                            <td><code>{{.Handle}}</code></td>
+                            <td>{{.ProgramType}}</td>
+                            <td>{{.Domain}}</td>
+                            <td><a href="/domains?program={{.Handle}}" class="btn btn-small">View Domains</a></td>
+                        </tr>
+                        {{else}}
+                        <tr><td colspan="5" class="empty">No bounty programs found</td></tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Watchtower - Automated Bug Bounty Asset Discovery</p>
+        </div>
+    </footer>
+</body>
+</html>

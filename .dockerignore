@@ -1,0 +1,39 @@
+# Git
+.git
+.gitignore
+
+# Database files
+*.db
+*.db-shm
+*.db-wal
+
+# Build artifacts
+watchtower
+*.exe
+*.dll
+*.so
+*.dylib
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.hackerone_token
+
+# Data directory (will be mounted as volume)
+data/
+
+# Logs
+*.log
+
+# Test files
+*_test.go

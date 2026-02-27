@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  watchtower:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: watchtower
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - HACKERONE_TOKEN=${HACKERONE_TOKEN}
+      - DATABASE_PATH=/app/data/watchtower.db
+      - WEB_PORT=8080
+      - HEALTH_CHECK_TIMEOUT=10s
+      - HEALTH_CHECK_WORKERS=50
+      - SCAN_INTERVAL=24h
+    volumes:
+      # Persist database
+      - ./data:/app/data
+      # Optional: Mount token file if you prefer file over env var
+      - ./.hackerone_token:/app/.hackerone_token:ro
+    networks:
+      - watchtower-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  watchtower-network:
+    driver: bridge
+
+volumes:
+  watchtower-data:
+    driver: local

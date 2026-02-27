@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Watchtower - Bug Bounty Asset Monitor</title>
+    <link rel="stylesheet" href="/static/style.css">
+    <meta http-equiv="refresh" content="10">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <h1>🛡️ Watchtower</h1>
+            <ul>
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/domains">Domains</a></li>
+                <li><a href="/programs">Programs</a></li>
+                <li><a href="/status-changes">Status Changes</a></li>
+                <li><a href="/filters">Filters</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h2>Dashboard</h2>
+            <p>Bug Bounty Asset Discovery & Monitoring - <span id="lastUpdate">Auto-refreshing every 10 seconds...</span></p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">{{.Stats.total_programs}}</div>
+                <div class="stat-label">Programs</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{.Stats.total_domains}}</div>
+                <div class="stat-label">Total Domains</div>
+            </div>
+            <div class="stat-card stat-up">
+                <div class="stat-value">{{.Stats.up_domains}}</div>
+                <div class="stat-label">Up Domains</div>
+            </div>
+            <div class="stat-card stat-down">
+                <div class="stat-value">{{.Stats.down_domains}}</div>
+                <div class="stat-label">Down Domains</div>
+            </div>
+            <div class="stat-card stat-new">
+                <div class="stat-value">{{.Stats.new_domains}}</div>
+                <div class="stat-label">New Domains</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h3>Recently Discovered Domains</h3>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Domain</th>
+                            <th>Program</th>
+                            <th>Status</th>
+                            <th>Discovered</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{range .NewDomains}}
+                        <tr>
+                            <td><code>{{.Domain}}</code></td>
+                            <td>{{.Program}}</td>
+                            <td>
+                                <span class="status-badge status-{{.Status}}">{{.Status}}</span>
+                            </td>
+                            <td>{{.DiscoveredAt.Format "2006-01-02 15:04"}}</td>
+                        </tr>
+                        {{else}}
+                        <tr>
+                            <td colspan="4" class="empty">No new domains found</td>
+                        </tr>
+                        {{end}}
+                    </tbody>
+                </table>
+            </div>
+            <div class="actions">
+                <a href="/domains" class="btn">View All Domains</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>Watchtower - Automated Bug Bounty Asset Discovery | Last updated: <span id="updateTime"></span></p>
+        </div>
+    </footer>
+    <script>
+        // Update timestamp
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('updateTime').textContent = now.toLocaleTimeString();
+        }
+        updateTime();
+        setInterval(updateTime, 1000);
+    </script>
+</body>
+</html>

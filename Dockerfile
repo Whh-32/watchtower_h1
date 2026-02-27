@@ -2,7 +2,14 @@
 FROM golang:1.21-alpine AS builder
 
 # Install build dependencies including C compiler for CGO and sqlite
-RUN apk add --no-cache git make gcc musl-dev sqlite-dev
+# Required for building go-sqlite3 which uses CGO
+RUN apk add --no-cache \
+    git \
+    make \
+    gcc \
+    musl-dev \
+    sqlite-dev \
+    linux-headers
 
 # Set working directory
 WORKDIR /build
